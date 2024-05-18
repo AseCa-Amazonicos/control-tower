@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+    db:
+        image: postgres:latest
+        container_name: control-tower
+        environment:
+            POSTGRES_USER: controltower
+            POSTGRES_PASSWORD: ct123
+            POSTGRES_DB: control-tower-db
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+
+volumes:
+    postgres_data:
+
