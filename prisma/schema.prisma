@@ -19,19 +19,12 @@ model Order {
     status      String
     totalAmount Float
     userId      Int
-    user        User     @relation(fields: [userId], references: [id])
+    mail        String
 }
 
-model User {
-    id      Int     @id @default(autoincrement())
-    email   String  @unique
-    name    String?
-    address String?
-    orders  Order[]
+model Stock {
+    id          Int      @id @default(autoincrement())
+    name        String
+    price       Float
+    quantity    Int
 }
-
-// model Product {
-//     id          String   @id @default(cuid()) // creates rd id for each product
-//     name        String
-//     price       Float
-// }
