@@ -7,15 +7,17 @@
     "prepare": "npm run compile",
     "pretest": "npm run compile",
     "posttest": "npm run lint",
-    "dev": "nodemon src.index.ts --exec ts-node",
+    "dev": "nodemon ./src/index.ts --exec ts-node",
     "test": "jest"
   },
   "dependencies": {
+    "@prisma/client": "^5.13.0",
     "@types/jest": "^29.5.12",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "morgan": "^1.10.0",
+    "pg": "^8.11.5",
     "prisma": "^5.13.0"
   },
   "devDependencies": {
