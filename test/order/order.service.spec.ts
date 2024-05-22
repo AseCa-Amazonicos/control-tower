@@ -31,10 +31,20 @@ describe('EventService Unit Test', () => {
         expect(result).toEqual([{
             id: 1,
             createdAt: Date.prototype,
-            status: '',
+            status: 'NOT_PREPARED',
             totalAmount: 100,
-            userId: 1,
-            mail: 'test@test.com',
+            address: 'Pilar',
+        }]);
+    });
+
+    it('create order', async () => {
+        const result = await orderService.getAllOrders();
+        expect(result).toEqual([{
+            id: 1,
+            createdAt: Date.prototype,
+            status: 'NOT_PREPARED',
+            totalAmount: 100,
+            address: 'Pilar',
         }]);
     });
 })

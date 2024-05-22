@@ -9,8 +9,7 @@ export class OrderRepositoryUtil implements IOrderRepository {
         createdAt: Date.prototype,
         status: 'NOT_PREPARED',
         totalAmount: 100,
-        userId: 1,
-        mail: 'test@test.com',
+        address: 'Pilar',
     };
     orders: Order[] = [this.testOrder];
     id = 1;
