@@ -17,4 +17,11 @@ export class OrderService implements IOrderService{
         return this.repository.createOrder(input)
     }
 
+    async getAllReadyToShip(): Promise<OrderDto[]> {
+        let orders: OrderDto[] = await this.getAllOrders()
+        return orders.filter(
+            order => order.status == "READY_TO_SHIP"
+        )
+    }
+
 }

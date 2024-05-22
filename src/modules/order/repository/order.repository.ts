@@ -18,8 +18,7 @@ export class OrderRepository implements IOrderRepository {
             data: {
                 status: input.status,
                 totalAmount: input.totalAmount,
-                userId: input.userId,
-                mail: input.mail
+                address: input.address
             }
         })
     }

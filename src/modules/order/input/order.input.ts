@@ -16,10 +16,6 @@ export class NewOrderInput {
     totalAmount: number;
 
     @IsNotEmpty()
-    @IsNumber()
-    userId: number;
-
-    @IsNotEmpty()
     @IsString()
-    mail: string;
+    address: string;
 }

@@ -17,4 +17,9 @@ export class OrderController {
     createOrder(@Request() req: ExpressRequest, @Body() input: NewOrderInput): Promise<OrderDto> {
         return this.orderService.createOrder(input)
     }
+
+    @Get("ready_to_ship")
+    getAllReadyToShipOrders(): Promise<OrderDto[]>{
+        return this.orderService.getAllReadyToShip()
+    }
 }

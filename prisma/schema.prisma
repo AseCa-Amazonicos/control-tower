@@ -19,8 +19,7 @@ model Order {
     createdAt   DateTime    @default(now())
     status      OrderStatus
     totalAmount Float
-    userId      Int
-    mail        String
+    address     String
 }
 
 model Stock {
