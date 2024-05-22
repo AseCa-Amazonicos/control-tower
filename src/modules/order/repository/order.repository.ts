@@ -2,6 +2,7 @@ import {Injectable} from "@nestjs/common";
 import {PrismaService} from "../../../prisma";
 import {IOrderRepository} from "./order.repository.interface";
 import { OrderDto } from "../dto/order.dto";
+import {NewOrderInput} from "../input/order.input";
 
 @Injectable()
 export class OrderRepository implements IOrderRepository {
@@ -10,6 +11,17 @@ export class OrderRepository implements IOrderRepository {
 
     async getAllOrders(): Promise<OrderDto[]> {
         return this.prisma.order.findMany();
+    }
+
+    createOrder(input: NewOrderInput): Promise<OrderDto> {
+        return this.prisma.order.create({
+            data: {
+                status: input.status,
+                totalAmount: input.totalAmount,
+                userId: input.userId,
+                mail: input.mail
+            }
+        })
     }
 
 }
