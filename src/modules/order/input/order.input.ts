@@ -1,13 +1,15 @@
 import {
+    IsEnum,
     IsNotEmpty,
     IsNumber,
     IsString,
 } from 'class-validator';
+import {OrderStatus} from '@prisma/client';
 
 export class NewOrderInput {
-    @IsString()
     @IsNotEmpty()
-    status: string;
+    @IsEnum(OrderStatus)
+    status: OrderStatus;
 
     @IsNumber()
     @IsNotEmpty()
