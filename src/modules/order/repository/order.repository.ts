@@ -8,8 +8,8 @@ export class OrderRepository implements IOrderRepository {
     constructor(private prisma: PrismaService) {
     }
 
-    getAllOrders(): Promise<OrderDto[]> {
-        return this.prisma.order.findMany()
+    async getAllOrders(): Promise<OrderDto[]> {
+        return this.prisma.order.findMany();
     }
 
 }
