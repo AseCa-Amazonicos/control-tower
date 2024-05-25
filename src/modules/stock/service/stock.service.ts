@@ -1,20 +1,23 @@
 import {Injectable} from "@nestjs/common";
 import {IStockService} from "./stock.service.interface";
 import {NewStockInput} from "../input/stock.input";
-import {StockDto} from "../dto/stock.dto";
+import {StockDto} from "../dto";
+import {IStockRepository} from "../repository";
 
 @Injectable()
 export class StockService implements IStockService {
+    constructor(private repository: IStockRepository) {}
+
     addStock(input: NewStockInput): Promise<StockDto> {
-        return Promise.resolve(undefined);
+        return this.repository.addStock(input)
     }
 
     getAllItemsInStock(): Promise<StockDto[]> {
-        return Promise.resolve([]);
+        return this.repository.getAllItemsInStock();
     }
 
     getStockById(id: number): Promise<StockDto> {
-        return Promise.resolve(undefined);
+        return this.repository.getStockById(id)
     }
 
 }
