@@ -23,10 +23,10 @@ model Order {
 }
 
 model Stock {
-    id       Int    @id @default(autoincrement())
-    name     String
-    price    Float
-    quantity Int
+    id        Int     @id @default(autoincrement())
+    product   Product @relation(fields: [productId], references: [id])
+    quantity  Int
+    productId Int     @unique
 }
 
 enum OrderStatus {
@@ -34,4 +34,11 @@ enum OrderStatus {
     READY_TO_SHIP
     SHIPPING
     DELIVERED
+}
+
+model Product {
+    id    Int    @id @default(autoincrement())
+    name  String
+    price Float
+    Stock Stock?
 }

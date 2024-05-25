@@ -3,6 +3,7 @@ import {OrderController} from "./order.controller";
 import {IOrderService, OrderService} from "./service";
 import {OrderRepository} from "./repository/order.repository";
 import {IOrderRepository} from "./repository";
+import {PickerModule} from "../picker/picker.module";
 
 const orderServiceProvider = {
     provide: IOrderService,
@@ -17,6 +18,7 @@ const orderRepositoryProvider = {
 @Module({
     controllers: [OrderController],
     providers: [orderServiceProvider, orderRepositoryProvider],
+    imports: [PickerModule]
 })
 
 export class OrderModule {}
