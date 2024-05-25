@@ -30,8 +30,7 @@ model Stock {
 }
 
 enum OrderStatus {
-    NOT_PREPARED
-    PREPARED
+    NOT_STARTED
     READY_TO_SHIP
     SHIPPING
     DELIVERED
