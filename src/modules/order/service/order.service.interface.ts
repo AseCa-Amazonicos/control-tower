@@ -6,4 +6,6 @@ export abstract class IOrderService{
     abstract createOrder(input: NewOrderInput): Promise<OrderDto>
 
     abstract getAllReadyToShip(): Promise<OrderDto[]>
+    abstract getAllDelivered(): Promise<OrderDto[]>
+    abstract getAllShipping(): Promise<OrderDto[]>
 }
