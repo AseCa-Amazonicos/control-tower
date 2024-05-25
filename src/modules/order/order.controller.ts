@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Post, Request} from "@nestjs/common";
+import {Body, Controller, Get, HttpCode, Post, Request} from "@nestjs/common";
 import {IOrderService} from "./service";
 import {OrderDto} from "./dto/order.dto";
 import {NewOrderInput} from "./input/order.input";
@@ -14,6 +14,7 @@ export class OrderController {
     }
 
     @Post()
+    @HttpCode(201)
     createOrder(@Request() req: ExpressRequest, @Body() input: NewOrderInput): Promise<OrderDto> {
         return this.orderService.createOrder(input)
     }
@@ -21,5 +22,15 @@ export class OrderController {
     @Get("ready_to_ship")
     getAllReadyToShipOrders(): Promise<OrderDto[]>{
         return this.orderService.getAllReadyToShip()
+    }
+
+    @Get("delivered")
+    getAllDelivered(): Promise<OrderDto[]>{
+        return this.orderService.getAllDelivered()
+    }
+
+    @Get("shipping")
+    getAllShipping(): Promise<OrderDto[]>{
+        return this.orderService.getAllShipping()
     }
 }
