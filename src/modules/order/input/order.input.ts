@@ -19,3 +19,4 @@ export class NewOrderInput {
     @IsString()
     address: string;
 }
+
