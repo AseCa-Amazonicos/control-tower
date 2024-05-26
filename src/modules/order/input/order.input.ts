@@ -1,10 +1,12 @@
 import {
+    IsArray,
     IsEnum,
     IsNotEmpty,
     IsNumber,
     IsString,
 } from 'class-validator';
 import {OrderStatus} from '@prisma/client';
+import {ProductOrderInput} from "./product.order.input";
 
 export class NewOrderInput {
     @IsNotEmpty()
@@ -18,5 +20,9 @@ export class NewOrderInput {
     @IsNotEmpty()
     @IsString()
     address: string;
+
+    @IsNotEmpty()
+    @IsArray()
+    products: ProductOrderInput[]
 }
 

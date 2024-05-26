@@ -15,24 +15,41 @@ datasource db {
 }
 
 model Order {
-    id          Int         @id @default(autoincrement())
-    createdAt   DateTime    @default(now())
+    id          Int               @id @default(autoincrement())
+    createdAt   DateTime          @default(now())
     status      OrderStatus
     totalAmount Float
     address     String
+    products    ProductOnOrders[] @relation()
 }
 
-model Stock {
-    id       Int    @id @default(autoincrement())
-    name     String
-    price    Float
-    quantity Int
-}
+// model Stock {
+//     id        Int     @id @default(autoincrement())
+//     product   Product @relation(fields: [productId], references: [id])
+//     quantity  Int
+//     productId Int     @unique
+// }
 
 enum OrderStatus {
-    NOT_PREPARED
-    PREPARED
+    NOT_STARTED
     READY_TO_SHIP
     SHIPPING
     DELIVERED
+}
+
+model Product {
+    id     Int               @id @default(autoincrement())
+    name   String
+    price  Float
+    orders ProductOnOrders[] @relation()
+}
+
+model ProductOnOrders {
+    order     Order   @relation(fields: [orderId], references: [id])
+    orderId   Int
+    product   Product @relation(fields: [productId], references: [id])
+    productId Int
+    quantity  Int
+
+    @@id([orderId, productId])
 }

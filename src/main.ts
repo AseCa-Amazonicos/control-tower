@@ -4,6 +4,10 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
+import {CallPickerService} from "./picker/CallPickerService";
+
+const pickerService = new CallPickerService();
+const rangeInMS = 10000; // 10 seconds
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -39,6 +43,9 @@ async function bootstrap() {
     return port;
 }
 
-bootstrap().then((port) =>
-    Logger.log(`NestJS server listening at port ${port}`, 'Bootstrap'),
+bootstrap().then((port) => {
+        Logger.log(`NestJS server listening at port ${port}`, 'Bootstrap')
+        // pickerService.startPeriodicCalls(rangeInMS, "order/get_all_orders")
+        // pickerService.startPeriodicCalls(rangeInMS, "stock/get_actual_stock")
+    }
 );
