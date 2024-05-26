@@ -10,26 +10,38 @@ export class StockRepository implements IStockRepository {
     }
 
     addStock(input: NewStockInput): Promise<StockDto> {
-        return this.prisma.stock.create({
-            data: {
-                name: input.name,
-                price: input.price,
-                quantity: input.quantity
-            }
-        })
+        return Promise.resolve(undefined);
     }
 
     getAllItemsInStock(): Promise<StockDto[]> {
-        return this.prisma.stock.findMany();
+        return Promise.resolve([]);
     }
 
     getStockById(id: number): Promise<StockDto> {
-        return this.prisma.stock.findUnique({
-                where: {
-                    id: id
-                }
-            }
-        )
+        return Promise.resolve(undefined);
     }
+
+    // addStock(input: NewStockInput): Promise<StockDto> {
+    //     return this.prisma.stock.create({
+    //         data: {
+    //             name: input.name,
+    //             price: input.price,
+    //             quantity: input.quantity
+    //         }
+    //     })
+    // }
+    //
+    // getAllItemsInStock(): Promise<StockDto[]> {
+    //     return this.prisma.stock.findMany();
+    // }
+    //
+    // getStockById(id: number): Promise<StockDto> {
+    //     return this.prisma.stock.findUnique({
+    //             where: {
+    //                 id: id
+    //             }
+    //         }
+    //     )
+    // }
 
 }
