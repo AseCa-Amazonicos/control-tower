@@ -4,6 +4,7 @@ import {PrismaModule} from "./prisma";
 import {OrderModule} from "./modules/order";
 import {PickerModule} from "./modules/picker/picker.module";
 import {StockModule} from "./modules/stock/stock.module";
+import {ProductModule} from "./modules/product/product.module";
 
 @Module({
     imports: [
@@ -13,7 +14,8 @@ import {StockModule} from "./modules/stock/stock.module";
         PrismaModule,
         OrderModule,
         StockModule,
-        PickerModule
+        PickerModule,
+        ProductModule
     ]
 })
 
