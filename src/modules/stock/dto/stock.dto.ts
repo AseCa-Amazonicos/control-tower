@@ -1,13 +1,11 @@
 export class StockDto {
     id: number;
-    name: string;
-    price: number;
+    itemName: string;
     quantity: number;
 
     constructor(stockDto: StockDto) {
         this.id = stockDto.id;
-        this.name = stockDto.name;
-        this.price = stockDto.price;
+        this.itemName = stockDto.itemName;
         this.quantity = stockDto.quantity;
     }
 }

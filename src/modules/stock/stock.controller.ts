@@ -2,7 +2,7 @@ import {Controller, ForbiddenException, Get, Param} from "@nestjs/common";
 import {IStockService} from "./service";
 import {StockDto} from "./dto";
 
-@Controller('order')
+@Controller('stock')
 export class StockController {
     constructor(private stockService: IStockService) {}
 
