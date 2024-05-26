@@ -18,7 +18,8 @@ const orderRepositoryProvider = {
 @Module({
     controllers: [OrderController],
     providers: [orderServiceProvider, orderRepositoryProvider],
-    imports: [PickerModule]
+    imports: [PickerModule],
+    exports: [orderServiceProvider]
 })
 
 export class OrderModule {}
