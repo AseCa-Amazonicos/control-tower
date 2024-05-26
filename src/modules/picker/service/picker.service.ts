@@ -1,10 +1,13 @@
-import {Injectable, PreconditionFailedException} from "@nestjs/common";
+import {Injectable} from "@nestjs/common";
 import axios from "axios";
-import {PickerOrderDto} from "../../order/dto/picker.order.dto";
-import {OrderDto} from "../../order/dto/order.dto";
+import {OrderDto, PickerOrderDto} from "../../order/dto";
+import {IProductService} from "../../product/service";
+import {ProductOrderInput} from "../../order/input/product.order.input";
+import {ItemInput} from "../input/item.input";
 
 @Injectable()
 export class PickerService {
+    constructor(private productService: IProductService) {}
 
     filterByReadyToShipPicker(orders: PickerOrderDto[]): PickerOrderDto[] {
         return orders.filter(
@@ -23,18 +26,12 @@ export class PickerService {
             });
     }
 
-    async addPickerOrders(order: OrderDto) {
+    async addPickerOrders(order: OrderDto, products: ProductOrderInput[]) {
+        let items : ItemInput[] = await this.getItems(products)
         return axios.post(`http://localhost:3000/api/picker/order/add_order`, {
             id: order.id,
             orderStatus: order.status,
-            items: [
-                {
-                    productId : 1,
-                    name: "Item 1",
-                    price: 1000.0,
-                    quantity: 10
-                }
-            ]
+            items: items
         })
             .catch(error => {
                 console.error('There was a problem with the request:', error);
@@ -50,5 +47,22 @@ export class PickerService {
             .catch(error => {
                 console.error('There was a problem with the request:', error);
             });
+    }
+
+    private async getItems(products: ProductOrderInput[]): Promise<ItemInput[]> {
+        const items: Promise<ItemInput>[] = products.map(
+            product => this.getItem(product)
+        );
+        return Promise.all(items);
+    }
+
+    private async getItem(productOrderInput: ProductOrderInput): Promise<ItemInput> {
+        let product = await this.productService.getById(productOrderInput.productId)
+        return {
+            productId: productOrderInput.productId,
+            name: product.name,
+            price: product.price,
+            quantity: productOrderInput.quantity
+        }
     }
 }
