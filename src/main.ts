@@ -45,7 +45,7 @@ async function bootstrap() {
 
 bootstrap().then((port) => {
         Logger.log(`NestJS server listening at port ${port}`, 'Bootstrap')
-        pickerService.startPeriodicCalls(rangeInMS, "order/get_all_orders")
-        pickerService.startPeriodicCalls(rangeInMS, "stock/get_actual_stock")
+        // pickerService.startPeriodicCalls(rangeInMS, "order/get_all_orders")
+        // pickerService.startPeriodicCalls(rangeInMS, "stock/get_actual_stock")
     }
 );
