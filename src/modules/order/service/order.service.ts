@@ -3,10 +3,10 @@ import {IOrderRepository} from "../repository";
 import {IOrderService} from "./order.service.interface";
 import {OrderDto} from "../dto/order.dto";
 import {NewOrderInput} from "../input/order.input";
-import axios from "axios";
 import {PickerOrderDto} from "../dto/picker.order.dto";
-import {OrderRepository} from "../repository/order.repository";
 import {PickerService} from "../../picker/service/picker.service";
+import {ProductOrderInput} from "../input/product.order.input";
+import {OrderWithProductsDto} from "../dto";
 
 @Injectable()
 export class OrderService implements IOrderService{
@@ -16,9 +16,18 @@ export class OrderService implements IOrderService{
         return this.repository.getAllOrders()
     }
 
+    async getAllOrdersWProducts(): Promise<OrderWithProductsDto[]> {
+        let orders: OrderDto[] = await this.getAllOrders()
+        const orderPromises: Promise<OrderWithProductsDto>[] = orders.map(
+            order => this.getOrderWProducts(order)
+        );
+        return Promise.all(orderPromises);
+    }
+
     async createOrder(input: NewOrderInput): Promise<OrderDto> {
         if(input.totalAmount <= 0) throw new PreconditionFailedException("The total amount must be greater that 0")
         let order = await this.repository.createOrder(input)
+        await this.addProductsToOrder(input.products, order)
         await this.pickerService.addPickerOrders(order)
         return order
     }
@@ -74,6 +83,30 @@ export class OrderService implements IOrderService{
             if(pickerOrder.status == "READY_TO_SHIP" && order.status == "NOT_STARTED"){
                 await this.repository.updateOrderStatus(order.id, "READY_TO_SHIP")
             }
+        }
+    }
+
+    private async addProductsToOrder(products: ProductOrderInput[], order: OrderDto) {
+        for (const product of products) {
+            console.log(product);
+            await this.repository.addProductToOrder(product.productId, product.quantity, order.id);
+        }
+    }
+
+    async getById(orderId: number): Promise<OrderWithProductsDto> {
+        let order = await this.repository.getById(orderId)
+        return this.getOrderWProducts(order)
+    }
+
+    private async getOrderWProducts(order: OrderDto): Promise<OrderWithProductsDto> {
+        let products = await this.repository.getProductsInOrder(order.id)
+        return {
+            id: order.id,
+            status: order.status,
+            createdAt: order.createdAt,
+            totalAmount: order.totalAmount,
+            address: order.address,
+            products: products
         }
     }
 }

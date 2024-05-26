@@ -1,8 +1,9 @@
-import {Body, Controller, Get, HttpCode, Post, Request} from "@nestjs/common";
+import {Body, Controller, ForbiddenException, Get, HttpCode, Param, Post, Request} from "@nestjs/common";
 import {IOrderService} from "./service";
 import {OrderDto} from "./dto/order.dto";
 import {NewOrderInput} from "./input/order.input";
 import {Request as ExpressRequest} from 'express';
+import {OrderWithProductsDto} from "./dto";
 
 @Controller('order')
 export class OrderController {
@@ -32,5 +33,17 @@ export class OrderController {
     @Get("shipping")
     getAllShipping(): Promise<OrderDto[]>{
         return this.orderService.getAllShipping()
+    }
+
+    @Get(':id')
+    async getById(
+        @Request() req: ExpressRequest,
+        @Param() param: string): Promise<OrderWithProductsDto>{
+        const orderId = parseInt(param['id']);
+        if (Number.isNaN(orderId)) {
+            throw new ForbiddenException('Order id must be a number');
+        } else {
+            return this.orderService.getById(orderId);
+        }
     }
 }
