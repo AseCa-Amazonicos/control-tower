@@ -10,14 +10,4 @@ export class StockController {
     async findAll(): Promise<StockDto[]> {
         return this.stockService.getAllItemsInStock()
     }
-
-    @Get(':id')
-    getStockById(@Param('id') id: string){
-        const stockId = parseInt(id);
-        if (Number.isNaN(stockId)) {
-            throw new ForbiddenException('Stock id must be a number');
-        } else {
-            return this.stockService.getStockById(stockId);
-        }
-    }
 }

@@ -1,52 +1,76 @@
 import {Injectable} from "@nestjs/common";
 import {IStockService} from "./stock.service.interface";
 import {StockDto} from "../dto";
-import {IStockRepository} from "../repository";
 import {PickerService} from "../../picker/service/picker.service";
 import {IOrderService} from "../../order/service";
 import {PickerStockDto} from "../dto/picker.stock.dto";
 import {IProductService} from "../../product/service";
+import {OrderWithProductsDto, ProductInOrderDto} from "../../order/dto";
+import {ProductDto} from "../../product/dto";
 
 @Injectable()
 export class StockService implements IStockService {
     constructor(
-        private repository: IStockRepository,
         private pickerService: PickerService,
         private productService: IProductService,
         private orderService: IOrderService) {}
 
     async getAllItemsInStock(): Promise<StockDto[]> {
-        const pickerStock : PickerStockDto[] = await this.pickerService.getPickerStock()
-        const notStartedOrders = await this.getNotStartedOrders()
-        // Iterate through not started orders
+        const pickerStock: PickerStockDto[] = await this.pickerService.getPickerStock();
+        console.log(pickerStock)
+        const notStartedOrders: OrderWithProductsDto[] = await this.getNotStartedOrders();
+        let stockWProductName = await this.getStockWProductName(pickerStock);
+
         for (const order of notStartedOrders) {
-            // Iterate through products in the order
             for (const product of order.products) {
-                // Find the corresponding item in picker's stock
-                const productDto = await this.productService.getById(product.productId)
-                const itemInStockIndex = pickerStock.findIndex(stock => stock.itemName === productDto.name);
-                // If item found, decrement the quantity
-                if (itemInStockIndex !== -1) {
-                    pickerStock[itemInStockIndex].quantity -= product.quantity;
-                }
+                stockWProductName = await this.updateStockQty(product, stockWProductName)
             }
         }
-        return pickerStock
+        return await this.getStockWProductName(pickerStock);
     }
 
-    getStockById(id: number): Promise<StockDto> {
-        return this.repository.getStockById(id)
-    }
-
-    private async getReadyToShipPickerOrders(){
-        const pickerOrders = await this.pickerService.getPickerOrders()
-        return this.pickerService.filterByReadyToShipPicker(pickerOrders)
-    }
 
     private async getNotStartedOrders(){
         const orders = await this.orderService.getAllOrdersWProducts()
         return orders.filter(
             order => order.status == "NOT_STARTED"
         )
+    }
+
+    private async getStockWProductName(pickerStock: PickerStockDto[]){
+        let stockWProductId: StockDto[] = [];
+        for (const stock of pickerStock) {
+            let product = await this.productService.getById(stock.productId)
+            console.log(product)
+            stockWProductId.push(this.getStockDto(stock, product))
+        }
+        return stockWProductId
+    }
+
+    private getStockDto(stock: PickerStockDto, productDto: ProductDto): StockDto {
+        return {
+            itemName: productDto.name,
+            quantity: stock.quantity,
+            productId: stock.productId
+        };
+    }
+
+    private async updateStockQty(product: ProductInOrderDto, stock: StockDto[]) {
+        const productDto = await this.getProductById(product);
+        const index = this.getProductInStock(productDto, stock);
+
+        if (index !== -1) {
+            stock[index].quantity -= product.quantity;
+        }
+
+        return stock
+    }
+
+    private async getProductById(product: ProductInOrderDto){
+        return await this.productService.getById(product.productId)
+    }
+
+    private getProductInStock(productDto: ProductDto, stockWProductId: StockDto[]){
+        return stockWProductId.findIndex(stock => stock.itemName === productDto.name)
     }
 }
