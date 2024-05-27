@@ -8,3 +8,5 @@ build
 # config IDE
 .vscode
 .idea
+
+/dist

@@ -4,9 +4,11 @@ import {
     IsNotEmpty,
     IsNumber,
     IsString,
+    ValidateNested,
 } from 'class-validator';
 import {OrderStatus} from '@prisma/client';
 import {ProductOrderInput} from "./product.order.input";
+import { Type } from 'class-transformer';
 
 export class NewOrderInput {
     @IsNotEmpty()
@@ -23,6 +25,8 @@ export class NewOrderInput {
 
     @IsNotEmpty()
     @IsArray()
+    @ValidateNested()
+    @Type(()=>ProductOrderInput)
     products: ProductOrderInput[]
 }
 
