@@ -25,3 +25,7 @@ you should set the pre-commit to run npm test
 2. run `docker-compose up -d`
 3. run `prisma migrate dev`
 4. `npm start`
+
+or run:
+1. chmod +x start-script.sh
+2. ./start-script.sh
