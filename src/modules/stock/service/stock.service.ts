@@ -26,7 +26,8 @@ export class StockService implements IStockService {
                 stockWProductName = await this.updateStockQty(product, stockWProductName)
             }
         }
-        return await this.getStockWProductName(pickerStock);
+
+        return stockWProductName;
     }
 
 
@@ -41,7 +42,6 @@ export class StockService implements IStockService {
         let stockWProductId: StockDto[] = [];
         for (const stock of pickerStock) {
             let product = await this.productService.getById(stock.productId)
-            console.log(product)
             stockWProductId.push(this.getStockDto(stock, product))
         }
         return stockWProductId
