@@ -17,7 +17,6 @@ export class StockService implements IStockService {
 
     async getAllItemsInStock(): Promise<StockDto[]> {
         const pickerStock: PickerStockDto[] = await this.pickerService.getPickerStock();
-        console.log(pickerStock)
         const notStartedOrders: OrderWithProductsDto[] = await this.getNotStartedOrders();
         let stockWProductName = await this.getStockWProductName(pickerStock);
 

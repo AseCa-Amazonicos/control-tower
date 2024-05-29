@@ -90,7 +90,7 @@ export class OrderService implements IOrderService{
 
     private async addProductsToOrder(products: ProductOrderInput[], order: OrderDto) {
         for (const product of products) {
-            console.log(product);
+            // console.log(product);
             await this.repository.addProductToOrder(product.productId, product.quantity, order.id);
         }
     }
