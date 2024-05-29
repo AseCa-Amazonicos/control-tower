@@ -4,6 +4,7 @@ import {OrderDto, PickerOrderDto} from "../../order/dto";
 import {IProductService} from "../../product/service";
 import {ProductOrderInput} from "../../order/input/product.order.input";
 import {ItemInput} from "../input/item.input";
+import {PickerStockDto} from "../../stock/dto/picker.stock.dto";
 
 @Injectable()
 export class PickerService {
@@ -38,8 +39,8 @@ export class PickerService {
             });
     }
 
-    async getPickerStock() {
-        return axios.get(`http://localhost:3000/api/picker/stock/get_actual_stock`)
+    async getPickerStock(): Promise<PickerStockDto[]> {
+        return axios.get(`http://localhost:3000/api/picker/stock/get_actual_stock_product_id`)
             .then(response => {
                 // Process the response data
                 return response.data

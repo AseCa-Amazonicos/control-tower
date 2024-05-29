@@ -1,11 +1,9 @@
 export class PickerStockDto {
-    id: number;
-    itemName: string;
+    productId: number;
     quantity: number;
 
     constructor(pickerStockDto: PickerStockDto) {
-        this.id = pickerStockDto.id;
-        this.itemName = pickerStockDto.itemName;
+        this.productId = pickerStockDto.productId;
         this.quantity = pickerStockDto.quantity;
     }
 }
