@@ -1,6 +1,7 @@
 import {OrderDto} from "../dto/order.dto";
 import {NewOrderInput} from "../input/order.input";
 import {OrderWithProductsDto} from "../dto";
+import {DeliveryOrderStatusDto} from "../dto/delivery.order.status.dto";
 
 export abstract class IOrderService{
     abstract getAllOrders() : Promise<OrderDto[]>
@@ -12,4 +13,6 @@ export abstract class IOrderService{
     abstract getAllShipping(): Promise<OrderDto[]>
 
     abstract getById(orderId: number): Promise<OrderWithProductsDto>
+
+    abstract updateStatus(deliveryOrderDto: DeliveryOrderStatusDto): Promise<OrderDto>
 }

@@ -4,6 +4,7 @@ import {OrderDto} from "./dto/order.dto";
 import {NewOrderInput} from "./input/order.input";
 import {Request as ExpressRequest} from 'express';
 import {OrderWithProductsDto} from "./dto";
+import {DeliveryOrderStatusDto} from "./dto/delivery.order.status.dto";
 
 @Controller('order')
 export class OrderController {
@@ -18,6 +19,13 @@ export class OrderController {
     @HttpCode(201)
     createOrder(@Request() req: ExpressRequest, @Body() input: NewOrderInput): Promise<OrderDto> {
         return this.orderService.createOrder(input)
+    }
+
+
+    @Post("update_status")
+    @HttpCode(200)
+    updateStatus(@Request() req: ExpressRequest, @Body() input: DeliveryOrderStatusDto): Promise<OrderDto> {
+        return this.orderService.updateStatus(input)
     }
 
     @Get("ready_to_ship")

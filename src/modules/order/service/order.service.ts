@@ -6,6 +6,8 @@ import {OrderDto, PickerOrderDto} from "../dto";
 import {PickerService} from "../../picker/service/picker.service";
 import {ProductOrderInput} from "../input/product.order.input";
 import {OrderWithProductsDto} from "../dto";
+import * as console from "node:console";
+import {DeliveryOrderStatusDto} from "../dto/delivery.order.status.dto";
 
 @Injectable()
 export class OrderService implements IOrderService{
@@ -116,5 +118,9 @@ export class OrderService implements IOrderService{
             pickerOrders.forEach(pickerOrder =>
                 this.orderContainsPicker(pickerOrder, orders))
         }
+    }
+
+    async updateStatus(deliveryOrderDto: DeliveryOrderStatusDto): Promise<OrderDto> {
+        return this.repository.updateOrderStatus(deliveryOrderDto.id, deliveryOrderDto.status)
     }
 }
