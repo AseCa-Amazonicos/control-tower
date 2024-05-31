@@ -17,7 +17,6 @@ export class StockService implements IStockService {
 
     async getAllItemsInStock(): Promise<StockDto[]> {
         const pickerStock: PickerStockDto[] = await this.pickerService.getPickerStock();
-        console.log(pickerStock)
         const notStartedOrders: OrderWithProductsDto[] = await this.getNotStartedOrders();
         let stockWProductName = await this.getStockWProductName(pickerStock);
 
@@ -41,7 +40,6 @@ export class StockService implements IStockService {
         let stockWProductId: StockDto[] = [];
         for (const stock of pickerStock) {
             let product = await this.productService.getById(stock.productId)
-            console.log(product)
             stockWProductId.push(this.getStockDto(stock, product))
         }
         return stockWProductId
