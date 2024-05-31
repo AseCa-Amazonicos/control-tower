@@ -25,7 +25,8 @@ export class StockService implements IStockService {
                 stockWProductName = await this.updateStockQty(product, stockWProductName)
             }
         }
-        return await this.getStockWProductName(pickerStock);
+
+        return stockWProductName;
     }
 
 

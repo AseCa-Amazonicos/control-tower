@@ -1,7 +1,7 @@
 import {Injectable} from "@nestjs/common";
 import {PrismaService} from "../../../prisma";
 import {IOrderRepository} from "./order.repository.interface";
-import { OrderDto } from "../dto/order.dto";
+import { OrderDto } from "../dto";
 import {NewOrderInput} from "../input/order.input";
 import {OrderStatus} from "@prisma/client";
 import {ProductOrderInput} from "../input/product.order.input";
