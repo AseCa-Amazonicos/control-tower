@@ -1,4 +1,10 @@
-import {Injectable, PreconditionFailedException} from "@nestjs/common";
+import {
+    forwardRef,
+    Inject,
+    Injectable,
+    PreconditionFailedException,
+    UnprocessableEntityException
+} from "@nestjs/common";
 import {IOrderRepository} from "../repository";
 import {IOrderService} from "./order.service.interface";
 import {NewOrderInput} from "../input/order.input";
@@ -6,10 +12,17 @@ import {OrderDto, PickerOrderDto} from "../dto";
 import {PickerService} from "../../picker/service/picker.service";
 import {ProductOrderInput} from "../input/product.order.input";
 import {OrderWithProductsDto} from "../dto";
+import {IStockService} from "../../stock/service";
+import {StockDto} from "../../stock/dto";
+import {StockModule} from "../../stock/stock.module";
 
 @Injectable()
 export class OrderService implements IOrderService{
-    constructor(private repository: IOrderRepository, private pickerService: PickerService) {}
+    constructor(
+        private repository: IOrderRepository,
+        private pickerService: PickerService,
+        @Inject(forwardRef(() => IStockService))
+        private stockService: IStockService) {}
 
     async getAllOrders(): Promise<OrderDto[]> {
         await this.updateOrders()
@@ -26,7 +39,12 @@ export class OrderService implements IOrderService{
     }
 
     async createOrder(input: NewOrderInput): Promise<OrderDto> {
-        if(input.totalAmount <= 0) throw new PreconditionFailedException("The total amount must be greater that 0")
+        if(input.totalAmount <= 0) {
+            throw new PreconditionFailedException("The total amount must be greater that 0")
+        }
+        if(await this.productNotExists(input.products)) {
+            throw new UnprocessableEntityException("The product's quantity selected doesn't exist")
+        }
         let order = await this.repository.createOrder(input)
         await this.addProductsToOrder(input.products, order)
         await this.pickerService.addPickerOrders(order, input.products)
@@ -116,5 +134,23 @@ export class OrderService implements IOrderService{
             pickerOrders.forEach(pickerOrder =>
                 this.orderContainsPicker(pickerOrder, orders))
         }
+    }
+
+    private async productNotExists(products: ProductOrderInput[]) {
+        const stock: StockDto[] = await this.stockService.getAllItemsInStock()
+        for (const product of products){
+            let productExist = false
+            for (const item of stock){
+                if(productExist) continue
+                if(product.productId === item.productId) {
+                    console.log(`product quantity: ${product.quantity}`)
+                    console.log(`item quantity: ${item.quantity}`)
+                    if (product.quantity <= item.quantity) productExist = true
+                }
+            }
+            if(productExist) continue
+            return true
+        }
+        return false;
     }
 }
