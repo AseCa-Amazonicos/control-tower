@@ -10,9 +10,9 @@
         "prepare": "npm run compile",
         "pretest": "npm run compile",
         "posttest": "npm run lint",
-        "dev": "nodemon ./src/index.ts --exec ts-node",
+        "dev": "NODE_ENV=dev nodemon ./src/index.ts --exec ts-node",
         "start": "nest start",
-        "test": "jest --config"
+        "test": "NODE_ENV=test jest --config"
     },
     "dependencies": {
         "@nestjs/common": "^10.3.8",
