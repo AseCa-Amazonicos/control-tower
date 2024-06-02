@@ -1,10 +1,16 @@
 import axios from "axios";
-import {OrderService} from "../modules/order/service";
 
 export class CallPickerService {
+    private readonly host: string
+    
+    constructor() {
+        this.host = process.env.PICKER_HOST;
+        if (this.host === undefined) this.host = "localhost"
+    }
+
     async callService(path: string) {
         // console.log("Calling the picker service...");
-        axios.get(`http://localhost:3000/api/picker/${path}`)
+        axios.get(`http://${this.host}:3000/api/picker/${path}`)
             .then(response => {
                 // Process the response data
                 // console.log(response.data);
