@@ -1,4 +1,7 @@
 {
+    "name": "control-tower",
+    "version": "1.0.1",
+    "private": true,
     "scripts": {
         "postinstall": "prisma generate",
         "build": "prisma generate && nest build",
