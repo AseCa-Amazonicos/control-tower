@@ -7,6 +7,8 @@ import {PickerStockDto} from "../dto/picker.stock.dto";
 import {IProductService} from "../../product/service";
 import {OrderWithProductsDto, ProductInOrderDto} from "../../order/dto";
 import {ProductDto} from "../../product/dto";
+import { PrismaClientValidationError } from "@prisma/client/runtime/library";
+import {NewProductInput} from "../../product/input";
 
 @Injectable()
 export class StockService implements IStockService {
@@ -20,7 +22,7 @@ export class StockService implements IStockService {
         const pickerStock: PickerStockDto[] = await this.pickerService.getPickerStock();
         const notStartedOrders: OrderWithProductsDto[] = await this.getNotStartedOrders();
         let stockWProductName = await this.getStockWProductName(pickerStock);
-
+        console.log(stockWProductName)
         for (const order of notStartedOrders) {
             for (const product of order.products) {
                 stockWProductName = await this.updateStockQty(product, stockWProductName)
