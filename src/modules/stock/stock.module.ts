@@ -1,4 +1,4 @@
-import {Module} from "@nestjs/common";
+import {forwardRef, Module} from "@nestjs/common";
 import {IStockService, StockService} from "./service";
 import {StockController} from "./stock.controller";
 import {PickerModule} from "../picker/picker.module";
@@ -12,7 +12,8 @@ const stockServiceProvider = {
 @Module({
     controllers: [StockController],
     providers: [stockServiceProvider],
-    imports: [PickerModule, OrderModule, ProductModule]
+    imports: [PickerModule, forwardRef(() => OrderModule), ProductModule],
+    exports: [stockServiceProvider]
 })
 
 export class StockModule {}

@@ -1,4 +1,7 @@
 {
+    "name": "control-tower",
+    "version": "1.0.1",
+    "private": true,
     "scripts": {
         "postinstall": "prisma generate",
         "build": "prisma generate && nest build",
@@ -12,6 +15,7 @@
         "posttest": "npm run lint",
         "dev": "NODE_ENV=dev nodemon ./src/index.ts --exec ts-node",
         "start": "nest start",
+        "start:dev": "nodemon",
         "test": "NODE_ENV=test jest --config"
     },
     "dependencies": {

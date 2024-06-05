@@ -1,9 +1,10 @@
-import {Module} from "@nestjs/common";
+import {forwardRef, Module} from "@nestjs/common";
 import {OrderController} from "./order.controller";
 import {IOrderService, OrderService} from "./service";
 import {OrderRepository} from "./repository/order.repository";
 import {IOrderRepository} from "./repository";
 import {PickerModule} from "../picker/picker.module";
+import {StockModule} from "../stock/stock.module";
 
 const orderServiceProvider = {
     provide: IOrderService,
@@ -18,7 +19,7 @@ const orderRepositoryProvider = {
 @Module({
     controllers: [OrderController],
     providers: [orderServiceProvider, orderRepositoryProvider],
-    imports: [PickerModule],
+    imports: [PickerModule, forwardRef(() => StockModule)],
     exports: [orderServiceProvider]
 })
 
