@@ -34,7 +34,7 @@ export class PickerService {
 
     async addPickerOrders(order: OrderDto, products: ProductOrderInput[]) {
         let items : ItemInput[] = await this.getItems(products)
-        return axios.post(`http://${this.host}:3000/api/picker/order/get_all_orders`, {
+        return axios.post(`http://${this.host}:3000/api/picker/order/add_order`, {
             id: order.id,
             orderStatus: order.status,
             items: items
@@ -45,7 +45,7 @@ export class PickerService {
     }
 
     async getPickerStock(): Promise<PickerStockDto[]> {
-        return axios.get(`http://${this.host}:3000/api/picker/stock/get_actual_stock`)
+        return axios.get(`http://${this.host}:3000/api/picker/stock/get_actual_stock_product_id`)
             .then(response => {
                 // Process the response data
                 return response.data
