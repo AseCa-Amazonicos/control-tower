@@ -45,7 +45,7 @@ export class PickerService {
     }
 
     async getPickerStock(): Promise<PickerStockDto[]> {
-        return axios.get(`http://${this.host}:3000/api/picker/order/get_all_orders`)
+        return axios.get(`http://${this.host}:3000/api/picker/stock/get_actual_stock`)
             .then(response => {
                 // Process the response data
                 return response.data
