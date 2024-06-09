@@ -1,24 +1,23 @@
 import {forwardRef, Inject, Injectable} from "@nestjs/common";
 import {IStockService} from "./stock.service.interface";
 import {StockDto} from "../dto";
-import {PickerService} from "../../picker/service/picker.service";
 import {IOrderService} from "../../order/service";
 import {PickerStockDto} from "../dto/picker.stock.dto";
 import {IProductService} from "../../product/service";
 import {OrderWithProductsDto, ProductInOrderDto} from "../../order/dto";
 import {ProductDto} from "../../product/dto";
+import {IPickerService} from "../../picker/service/picker.interface.service";
 
 @Injectable()
 export class StockService implements IStockService {
     constructor(
-        private pickerService: PickerService,
+        private pickerService: IPickerService,
         private productService: IProductService,
         @Inject(forwardRef(() => IOrderService))
         private orderService: IOrderService) {}
 
     async getAllItemsInStock(): Promise<StockDto[]> {
         const pickerStock: PickerStockDto[] = await this.pickerService.getPickerStock();
-        console.log(pickerStock)
         const notStartedOrders: OrderWithProductsDto[] = await this.getNotStartedOrders();
         let stockWProductName = await this.getStockWProductName(pickerStock);
 
