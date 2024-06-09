@@ -24,13 +24,15 @@ describe('EventService Unit Test', () => {
     const date = Date.now()
 
     beforeEach(async () => {
+        orderRepository = createMock<IOrderRepository>()
+
         const orderServiceProvider = {
             provide: IOrderService,
             useClass: OrderService,
         };
         const orderRepositoryProvider = {
             provide: IOrderRepository,
-            useClass: createMock<IOrderRepository>(),
+            useValue: orderRepository,
         };
         const productServiceProvider = {
             provide: IProductService,
@@ -57,7 +59,7 @@ describe('EventService Unit Test', () => {
                 stockProvider,
                 {
                     provide: IOrderRepository,
-                    useValue: createMock<IOrderRepository>(),
+                    useValue: orderRepository,
                 }
             ],
         })
@@ -65,7 +67,6 @@ describe('EventService Unit Test', () => {
         .compile();
 
         orderService = app.get<OrderService>(OrderService);
-        orderRepository = app.get(IOrderRepository)
     });
 
     it('create order', async () => {
