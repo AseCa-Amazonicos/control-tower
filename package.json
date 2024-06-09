@@ -52,8 +52,5 @@
         "ts-node": "^10.9.2",
         "typescript": "~5.2.0",
         "xunit.ts": "^1.4.0"
-    },
-    "jest": {
-        "verbose": true
     }
 }
