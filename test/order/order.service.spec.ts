@@ -4,35 +4,30 @@ import {IOrderRepository} from '../../src/modules/order/repository';
 import {IStockService} from '../../src/modules/stock/service';
 import {StockService} from '../../src/modules/stock/service';
 import {NewOrderInput} from '../../src/modules/order/input/order.input';
-import {OrderRepository} from '../../src/modules/order/repository/order.repository';
-import {PrismaService} from '../../src/prisma';
-import {ConfigService} from '@nestjs/config';
 import {
     IProductService,
     ProductService,
 } from '../../src/modules/product/service';
 import {
     IProductRepository,
-    ProductRepository,
 } from '../../src/modules/product/repository';
-import { DeepMocked, createMock } from '@golevelup/ts-jest'
-import { StockModule } from '../../src/modules/stock/stock.module';
+import {IPickerService} from "../../src/modules/picker/service/picker.interface.service";
+import {MockPickerService} from "../picker/util/mock.picker.service";
+import {MockOrderRepository} from "./util/order.repository.util";
+import {MockProductRepository} from "../product/util/mock.product.repository";
 
 describe('EventService Unit Test', () => {
     let orderService: IOrderService;
-    let orderRepository: DeepMocked<IOrderRepository>;
     const date = Date.now()
 
     beforeEach(async () => {
-        orderRepository = createMock<IOrderRepository>()
-
         const orderServiceProvider = {
             provide: IOrderService,
             useClass: OrderService,
         };
         const orderRepositoryProvider = {
             provide: IOrderRepository,
-            useValue: orderRepository,
+            useValue: MockOrderRepository,
         };
         const productServiceProvider = {
             provide: IProductService,
@@ -42,31 +37,27 @@ describe('EventService Unit Test', () => {
             provide: IStockService,
             useClass: StockService,
         };
+        const pickerService = {
+            provide: IPickerService,
+            useClass: MockPickerService,
+        };
 
         const app: TestingModule = await Test.createTestingModule({
-            imports: [StockModule],
             providers: [
-                PrismaService,
-                ConfigService,
-                //orderRepositoryProvider,
+                orderRepositoryProvider,
                 orderServiceProvider,
-                OrderService,
                 productServiceProvider,
                 {
                     provide: IProductRepository,
-                    useClass: ProductRepository,
+                    useClass: MockProductRepository,
                 },
                 stockProvider,
-                {
-                    provide: IOrderRepository,
-                    useValue: orderRepository,
-                }
+                pickerService
             ],
         })
-        .useMocker(createMock)
         .compile();
 
-        orderService = app.get<OrderService>(OrderService);
+        orderService = app.get<IOrderService>(IOrderService);
     });
 
     it('create order', async () => {
@@ -84,13 +75,7 @@ describe('EventService Unit Test', () => {
             },
         ];
 
-        orderRepository.createOrder.mockResolvedValueOnce({
-            id: 1,
-            createdAt: new Date(date),
-            status: 'NOT_STARTED',
-            totalAmount: 150,
-            address: 'CABA',
-        })
+        // orderRepository.createOrder(input)
         const result = await orderService.createOrder(input);
         expect(result).toEqual(
             {
