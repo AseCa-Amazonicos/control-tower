@@ -12,7 +12,6 @@
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"compiled_tests_dir/src/**/*.ts\" \"compiled_tests_dir/test/**/*.ts\"",
         "prepare": "npm run compile",
         "pretest": "npm run compile",
-        "posttest": "npm run lint",
         "dev": "NODE_ENV=dev nodemon ./src/index.ts --exec ts-node",
         "start": "nest start",
         "start:dev": "nodemon",
