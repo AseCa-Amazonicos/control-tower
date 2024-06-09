@@ -8,7 +8,7 @@ import {PickerStockDto} from "../../../src/modules/stock/dto/picker.stock.dto";
 export class MockPickerService extends IPickerService {
     private orders: OrderDto[];
     private productOrder: ProductOrderInput[];
-    private stock: PickerStockDto[];
+    private stock: PickerStockDto[] = [];
     constructor() {
         super();
         this.orders = [];
@@ -29,6 +29,7 @@ export class MockPickerService extends IPickerService {
     }
 
     getPickerStock() {
+        this.stock.push(this.getProduct())
         return this.stock
     }
 
@@ -36,6 +37,13 @@ export class MockPickerService extends IPickerService {
         return {
             orderId: order.id,
             status: order.status
+        };
+    }
+
+    private getProduct(): PickerStockDto {
+        return {
+            productId: 1,
+            quantity: 100
         };
     }
 }

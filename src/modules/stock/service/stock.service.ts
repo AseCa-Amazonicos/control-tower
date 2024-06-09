@@ -7,8 +7,6 @@ import {IProductService} from "../../product/service";
 import {OrderWithProductsDto, ProductInOrderDto} from "../../order/dto";
 import {ProductDto} from "../../product/dto";
 import {IPickerService} from "../../picker/service/picker.interface.service";
-import { PrismaClientValidationError } from "@prisma/client/runtime/library";
-import {NewProductInput} from "../../product/input";
 
 @Injectable()
 export class StockService implements IStockService {

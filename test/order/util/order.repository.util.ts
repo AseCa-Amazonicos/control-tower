@@ -3,10 +3,10 @@ import {IOrderRepository} from "../../../src/modules/order/repository";
 import {OrderDto, ProductInOrderDto} from "../../../src/modules/order/dto";
 import {NewOrderInput} from "../../../src/modules/order/input/order.input";
 
-export class MockOrderRepository implements IOrderRepository {
+export class MockOrderRepository extends IOrderRepository {
     testOrder: Order = {
         id: 1,
-        createdAt: Date.prototype,
+        createdAt: new Date(),
         status: 'NOT_STARTED',
         totalAmount: 100,
         address: 'Pilar',

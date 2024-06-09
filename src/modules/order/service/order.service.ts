@@ -141,8 +141,6 @@ export class OrderService implements IOrderService{
             for (const item of stock){
                 if(productExist) continue
                 if(product.productId === item.productId) {
-                    console.log(`product quantity: ${product.quantity}`)
-                    console.log(`item quantity: ${item.quantity}`)
                     if (product.quantity <= item.quantity) productExist = true
                 }
             }

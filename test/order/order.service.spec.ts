@@ -18,46 +18,40 @@ import {MockProductRepository} from "../product/util/mock.product.repository";
 
 describe('EventService Unit Test', () => {
     let orderService: IOrderService;
-    const date = Date.now()
+    let productService: IProductService;
 
     beforeEach(async () => {
-        const orderServiceProvider = {
-            provide: IOrderService,
-            useClass: OrderService,
-        };
-        const orderRepositoryProvider = {
-            provide: IOrderRepository,
-            useValue: MockOrderRepository,
-        };
-        const productServiceProvider = {
-            provide: IProductService,
-            useClass: ProductService,
-        };
-        const stockProvider = {
-            provide: IStockService,
-            useClass: StockService,
-        };
-        const pickerService = {
-            provide: IPickerService,
-            useClass: MockPickerService,
-        };
-
         const app: TestingModule = await Test.createTestingModule({
             providers: [
-                orderRepositoryProvider,
-                orderServiceProvider,
-                productServiceProvider,
+                {
+                    provide: IOrderRepository,
+                    useClass: MockOrderRepository,
+                },
+                {
+                    provide: IOrderService,
+                    useClass: OrderService,
+                },
+                {
+                    provide: IProductService,
+                    useClass: ProductService,
+                },
                 {
                     provide: IProductRepository,
                     useClass: MockProductRepository,
                 },
-                stockProvider,
-                pickerService
+                {
+                    provide: IStockService,
+                    useClass: StockService,
+                },
+                {
+                    provide: IPickerService,
+                    useClass: MockPickerService,
+                },
             ],
-        })
-        .compile();
+        }).compile();
 
         orderService = app.get<IOrderService>(IOrderService);
+        productService = app.get<IProductService>(IProductService);
     });
 
     it('create order', async () => {
@@ -68,20 +62,25 @@ describe('EventService Unit Test', () => {
         input.status = 'NOT_STARTED';
         input.totalAmount = 150;
         input.address = 'CABA';
+        const product = await productService.createProduct({
+            name: "product",
+            price: 1
+        })
+
+        console.log(product.id)
         input.products = [
             {
-                productId: 4,
+                productId: product.id,
                 quantity: 1,
             },
         ];
-
         // orderRepository.createOrder(input)
         const result = await orderService.createOrder(input);
         expect(result).toEqual(
             {
                 id: 1,
-                createdAt: date,
                 status: 'NOT_STARTED',
+                createdAt: {},
                 totalAmount: 150,
                 address: 'CABA',
             },
