@@ -5,20 +5,16 @@ import {IProductService} from "../../product/service";
 import {ProductOrderInput} from "../../order/input/product.order.input";
 import {ItemInput} from "../input/item.input";
 import {PickerStockDto} from "../../stock/dto/picker.stock.dto";
+import {IPickerService} from "./picker.interface.service";
 import { config } from "dotenv";
 
 @Injectable()
-export class PickerService {
+export class PickerService extends IPickerService {
     private readonly host: string
     constructor(private productService: IProductService) {
+        super();
         this.host = process.env.PICKER_HOST;
         if (this.host === undefined) this.host = "localhost"
-    }
-
-    filterByReadyToShipPicker(orders: PickerOrderDto[]): PickerOrderDto[] {
-        return orders.filter(
-            order => order.status == "READY_TO_SHIP"
-        )
     }
 
     async getPickerOrders() {
@@ -44,7 +40,7 @@ export class PickerService {
             });
     }
 
-    async getPickerStock(): Promise<PickerStockDto[]> {
+    async getPickerStock() {
         return axios.get(`http://${this.host}:3000/api/picker/stock/get_actual_stock_product_id`)
             .then(response => {
                 // Process the response data
