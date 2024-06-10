@@ -17,18 +17,7 @@ services:
             retries: 15
         volumes:
             - postgres_data:/var/lib/postgresql/data
-    db-test:
-        image: postgres:16
-        container_name: control-tower-test
-        environment:
-            POSTGRES_USER: controltower
-            POSTGRES_PASSWORD: ct123
-            POSTGRES_DB: control-tower-db-test
-        ports:
-            - "5435:5432"
-        volumes:
-            - db_test:/var/lib/postgresql/data
-    
+
     api:
         build:
             context: .
