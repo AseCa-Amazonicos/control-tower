@@ -1,7 +1,6 @@
-import {OrderDto} from "../dto/order.dto";
+import {OrderDto} from "../dto";
 import {NewOrderInput} from "../input/order.input";
 import {OrderStatus} from "@prisma/client";
-import {ProductOrderInput} from "../input/product.order.input";
 import {ProductInOrderDto} from "../dto";
 
 export abstract class IOrderRepository{

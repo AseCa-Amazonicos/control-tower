@@ -9,18 +9,17 @@ import {IOrderRepository} from "../repository";
 import {IOrderService} from "./order.service.interface";
 import {NewOrderInput} from "../input/order.input";
 import {OrderDto, PickerOrderDto} from "../dto";
-import {PickerService} from "../../picker/service/picker.service";
 import {ProductOrderInput} from "../input/product.order.input";
 import {OrderWithProductsDto} from "../dto";
 import {IStockService} from "../../stock/service";
 import {StockDto} from "../../stock/dto";
-import {StockModule} from "../../stock/stock.module";
+import {IPickerService} from "../../picker/service/picker.interface.service";
 
 @Injectable()
 export class OrderService implements IOrderService{
     constructor(
         private repository: IOrderRepository,
-        private pickerService: PickerService,
+        private pickerService: IPickerService,
         @Inject(forwardRef(() => IStockService))
         private stockService: IStockService) {}
 
@@ -94,7 +93,7 @@ export class OrderService implements IOrderService{
     }
 
     private pickerHasTheSameReadyToShipOrders(pickerOrders: PickerOrderDto[], orders: OrderDto[]) {
-        return this.pickerService.filterByReadyToShipPicker(pickerOrders).length == this.filterByReadyToShip(orders).length
+        return this.filterByReadyToShipPicker(pickerOrders).length == this.filterByReadyToShip(orders).length
             && pickerOrders.length == orders.length
     }
 
@@ -108,7 +107,6 @@ export class OrderService implements IOrderService{
 
     private async addProductsToOrder(products: ProductOrderInput[], order: OrderDto) {
         for (const product of products) {
-            // console.log(product);
             await this.repository.addProductToOrder(product.productId, product.quantity, order.id);
         }
     }
@@ -143,8 +141,6 @@ export class OrderService implements IOrderService{
             for (const item of stock){
                 if(productExist) continue
                 if(product.productId === item.productId) {
-                    console.log(`product quantity: ${product.quantity}`)
-                    console.log(`item quantity: ${item.quantity}`)
                     if (product.quantity <= item.quantity) productExist = true
                 }
             }
@@ -152,5 +148,11 @@ export class OrderService implements IOrderService{
             return true
         }
         return false;
+    }
+
+    private filterByReadyToShipPicker(pickerOrders: PickerOrderDto[]) {
+        return pickerOrders.filter(
+            order => order.status == "READY_TO_SHIP"
+        )
     }
 }
